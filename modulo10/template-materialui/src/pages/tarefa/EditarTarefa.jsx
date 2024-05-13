@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { FormControl, InputLabel, Input, FormHelperText } from '@mui/material';
+import { FormControl, InputLabel, Input, FormHelperText, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Grid from '@mui/material/Grid';
@@ -19,7 +19,7 @@ const EditarTarefa = ({handleCloseEditar, idTarefaSelecionada, tarefas, tarefa, 
   const [fimTarefa, setFimTarefa] = useState('');
   const [recursoTarefa, setRecursoTarefa] = useState('');
   const [statusTarefa, setStatusTarefa] = useState('');
-
+  const [openEditar, setOpenEditar] = useState(false);
   //Abaixo setamos os valores dos states (que popularão o formulário mais abaixo) com os valores do state Tarefa,
   //  recebido como props do componente ListarTarefa.
   useEffect(() => {
@@ -42,6 +42,9 @@ const EditarTarefa = ({handleCloseEditar, idTarefaSelecionada, tarefas, tarefa, 
   };
 
   const handleEditar = () => {
+    setOpenEditar(true);
+  };
+  const handleConfirmarEditar = () => {
     //console.log(`id: ${idTarefa} \n titulo: ${tituloTarefa} \n descrição: ${descricaoTarefa} \n inicio: ${inicioTarefa} \n fim: ${fimTarefa} \n recurso: ${recursoTarefa} \n status: ${statusTarefa}`);
     //console.log('idTarefaSelecionada: ' + idTarefaSelecionada);
     setTarefas(current =>
@@ -65,6 +68,7 @@ const EditarTarefa = ({handleCloseEditar, idTarefaSelecionada, tarefas, tarefa, 
 
     //console.log(`Tarefas Editadas: ` + JSON.stringify(tarefas));
     handleCloseEditar();
+    setOpenEditar(false);
   };
 
   return(
@@ -166,6 +170,13 @@ const EditarTarefa = ({handleCloseEditar, idTarefaSelecionada, tarefas, tarefa, 
           </Grid>
         </CardContent>
       </Card>
+      <Dialog open={openEditar} onClose={() => setOpenEditar(false)}>
+        <DialogTitle>Tem certeza que deseja editar a tarefa {tituloTarefa}?</DialogTitle>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setOpenEditar(false)}>Cancelar</Button>
+          <Button variant="contained" color="success" onClick={handleConfirmarEditar}>Editar</Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 }
